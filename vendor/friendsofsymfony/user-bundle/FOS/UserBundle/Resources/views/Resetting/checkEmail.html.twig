@@ -1,0 +1,20 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+
+{% block fos_user_content %}
+<br/>
+<div class="row alert-success"}>
+	<div class="col-sm-3"></div>
+	<div class="col-sm-6">
+		<p>Un correo le ha sido enviado. Contiene un enlace de activación que debes presionar para el restablecimiento de su contraseña. </p>
+	</div>
+	<div class="col-sm-3"></div>
+</div>
+<br/>
+<div class="row">
+	<div class="col-sm-4"></div>
+	<div class="col-sm-6 text-center">
+		<img src="{{ asset('images/email_send.png') }}" width="400px">
+	</div>
+	<div class="col-sm-2"></div>
+</div>
+{% endblock %}

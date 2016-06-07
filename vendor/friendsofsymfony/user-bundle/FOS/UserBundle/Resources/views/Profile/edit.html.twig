@@ -1,0 +1,22 @@
+{% extends "::base2.html.twig" %}
+
+{% block left_sidebar %}
+	<div class="col-sm-12">
+		<img src="{{ asset('images/perfil.png') }}">
+	</div>
+	<div class="col-sm-12 text-center">
+		<small><h4><strong>Nombre:</strong><em>{{ user.name }}</em></h4></small>
+		<small><h4><strong>Apellido:</strong><em>{{ user.lastname }}</em></h4></small>
+		<small><h4><strong>C.I.:</strong><em>{{ user.ci }}</em></h4></small>
+		
+		<small><h4><strong>Nombre de usuario:</strong><em>{{ user.username }}</em></h4></small>
+
+		<small><h4><strong>Teléfono:</strong><em>{{ user.phone }}</em></h4></small>
+		<small><h4><strong>Email:</strong><em>{{ user.email }}</em></h4></small>
+	</div>
+{% endblock left_sidebar %}
+
+{% block right_sidebar %}
+<br/>
+{% include "FOSUserBundle:Profile:edit_content.html.twig" %}
+{% endblock  %}

@@ -1,0 +1,20 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+
+{% block fos_user_content %}
+    <br/>
+    {% if app.session is not empty %}
+        {% set targetUrl = app.session.get('_security.' ~ app.security.token.providerKey ~ '.target_path') %}
+        {% if targetUrl is not empty %}<p><a href="{{ targetUrl }}">{{ 'registration.back'|trans({}, 'FOSUserBundle') }}</a></p>{% endif %}
+    {% endif %}
+    <div class="row">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-6">
+        	<img src="{{ asset('images/registro_exitoso.png') }}" width="" />
+        	<p>¡Felicidades! El nuevo usuario se encuentra registrado en el sistema.</p>
+        	<p><a href="{{ path('fos_user_registration_register') }}" />¿Registrar otro usuario?</a></p>
+        </div>
+        <div class="col-sm-3"></div>
+    </div>
+    <br/><br/>
+    <br/><br/>
+{% endblock fos_user_content %}
