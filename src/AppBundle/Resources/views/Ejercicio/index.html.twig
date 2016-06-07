@@ -1,0 +1,126 @@
+{% extends '::base2.html.twig' %}
+
+{% block title %}Ejercicios{% endblock %}
+
+{% block body %}
+    {% for flashMessage in app.session.flashbag.get('mensaje') %}
+        <div class="alert alert-success text-center">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    <h1><small>LISTA  DE EJERCICIOS</small></h1>
+    <div class="row" >
+        <div class="col-lg-4"></div>
+        <div class="col-lg-4"></div>
+        <div class="col-lg-4">
+            <div class="input-group">
+                <input id="buscar" type="text" class="form-control" placeholder="Filtre por Id, Componente o Asignatura">
+                <span class="input-group-addon "><span class="glyphicon glyphicon-search"></span>Buscar</span>
+            </div>
+        </div>
+    </div>
+    <div id="resu_busq">
+        <div class="text-right">
+            <h3><small><em>Cantidad de ejercicios: {{ pagination.getTotalItemCount }}</h3></small></em>
+        </div>
+        <table class="records_list table table-striped">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Descripción</th>
+                    <th>Asignatura</th>
+                    <th>Último uso</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="filas_ejercicios">
+            {% for entity in pagination %}
+                <tr>
+                    <td><a href="{{ path('ejercicio_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                    <td>{{ entity.descripcion | raw }}</td>
+                    <td>{{ entity.asignatura }}</td>
+                    <td>{% if entity.fechaUltimoUso %}{{ entity.fechaUltimoUso|date('Y-m-d') }}{% endif %}</td>
+                    <td>
+                    <ul class="list-inline">
+                        <li>
+                            <a href="{{ path('ejercicio_show', { 'id': entity.id }) }}">
+                                <button type="submit" class="btn btn-info btn-xs"> 
+                                    <span class="glyphicon glyphicon-eye-open"></span> Ver
+                                </button>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ path('ejercicio_edit', { 'id': entity.id }) }}">
+                                <button type="submit" class="btn btn-primary btn-xs"> 
+                                    <span class="glyphicon glyphicon-wrench"></span> Editar
+                                </button>
+                            </a>
+                        </li>
+                    </ul>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div class="paginacion">
+            {{ knp_pagination_render(pagination) }}
+        </div>
+    </div>
+    <div class="text-right">
+        <ul>
+            <li>
+                <a href="{{ path('ejercicio_new') }}">
+                    <button type="submit" class="btn btn-primary btn-lg"> 
+                        <span class="glyphicon glyphicon-plus-sign"></span> Crear ejercicio
+                    </button>
+                </a>
+            </li>
+        </ul>
+    </div>
+    {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function(){
+            //variable global que contiene la pagina seleccionada
+            var pagina;
+            $('#buscar').keyup(function(key)
+            {
+                if ($(this).val().length >= 1 || $(this).val() == '')
+                {
+                    $.ajax({
+                        url : "{{ path('ejercicio') }}",
+                        type: "POST",
+                        data : { texto: $(this).val() },
+                        success: function(html) {
+                            $("#resu_busq").html(html);
+                        }
+                    });
+                    //alert("el valor es mayor que 3 o es vacio: " + $(this).val());
+                }
+            });
+
+            $("#resu_busq").on("click",".pagination li a", function(e){
+                $("#resu_busq").html("Cagando ejercicios...");
+                bandera = true;
+                pagina = $(this).attr("href");
+                pagina = pagina.substring(pagina.length-1, pagina.length);
+                e.preventDefault();
+                metodo();
+            });
+
+            function metodo(){
+                var busqueda = $("#buscar").val();
+                $.ajax({
+                    url : "{{ path('ejercicio') }}",
+                    type: "POST",
+                    data : { texto: busqueda, page: pagina },
+                    success: function(html) {
+                        $("#resu_busq").html(html);
+                    }
+                });
+            }
+        });
+    </script>
+{% endblock javascripts %}

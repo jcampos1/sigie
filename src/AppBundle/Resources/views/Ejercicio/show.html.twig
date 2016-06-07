@@ -1,0 +1,72 @@
+{% extends '::base2.html.twig' %}
+{% block title %}Ver-Ejercicio{% endblock %}
+{% block body -%}
+    {% for flashMessage in app.session.flashbag.get('mensaje') %}
+        <div class="alert alert-success text-center">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    <h1><small>EJERCICIO</small></h1>
+
+    <table class="record_properties table table-striped">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Descripción</th>
+                <td>{{ entity.descripcion | raw }}</td>
+            </tr>
+            <tr>
+                <th>Componente</th>
+                {% if entity.componente == "teorico" %}
+                    <td>Teórico</td>
+                {% else %}
+                    <td>Práctico</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <th>Asignatura</th>
+                <td>{{ entity.asignatura }}</td>
+            </tr>
+            <tr>
+                <th>Fecha de creación</th>
+                <td>{{ entity.fechaCreacion|date('Y-m-d') }}</td>
+            </tr>
+            <tr>
+                <th>Visibilidad</th>
+                <td>{{ entity.visibilidad }}</td>
+            </tr>
+            <tr>
+                <th>Complejidad(es)</th>
+                <td>
+            {% for complejidad in entity.complejidades %}
+                {{ complejidad.nombre }} |
+            {% endfor %}
+                </td>
+            </tr>
+            
+            <tr>
+                <th>Fecha de último uso</th>
+                <td>{{ entity.fechaUltimoUso|date('Y-m-d') }}</td>
+            </tr>
+            <tr>
+                <th>Solución</th>
+                <td>{{ entity.solucion | raw }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    {% set listado = "ejercicio" %}
+    {% set editar = "ejercicio_edit" %}
+    <div id="control">
+    {{ include("::regre_edit_elim.html.twig") }}
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/funciones.js') }}"></script>
+{% endblock javascripts %}

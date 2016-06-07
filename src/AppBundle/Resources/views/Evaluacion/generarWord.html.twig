@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    </head>
+    <style>
+        body { font-family: Helvetica, sans-serif; }
+    </style>
+    <body>
+
+        <p style="text-align:left">
+            Universidad de Carabobo<br>                             
+            Facultad Experimental de Ciencias y Tecnología<br>        
+            Departamento de Computación<br>
+            Unidad Académica Matemáticas de la Computación
+        </p>
+        
+        <p style="text-align:right"><br>
+        {{ fecha }}
+        </p>
+        
+        <p style="text-align:center; font-family:Times New Roman;"><strong>{{ tipo }}<br>
+        <i>{{ titulo }}</i>
+        </p>
+        <br>
+        <p>Nombre:_________________________________ C.I:_________________ No.:____</p>
+        <table>
+            {{ contenido_evaluacion  | raw }}
+        </table>
+    </body>
+</html>

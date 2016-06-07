@@ -1,0 +1,58 @@
+{% extends '::base2.html.twig' %}
+
+{% block body %}
+    
+    {% for flashMessage in app.session.flashbag.get('mensaje') %}
+        <div class="alert alert-success text-center">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    <h1><small>MENSAJE</small></h1>
+
+    <table class="record_properties table table-striped">
+        <tbody>
+            <tr>
+                <th>Asunto</th>
+                <td>{{ entity.asunto }}</td>
+            </tr>
+            <tr>
+                <th>Descripción</th>
+                <td>{{ entity.descripcion|raw }}</td>
+            </tr>
+            {% if buzon == "salida" %}
+            <tr>
+                <th>Estado</th>
+                {% if entity.estado == false %}
+                    <td>No leido</td>
+                {% else %}
+                    <td>Leido</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <th>Destinatario</th>
+                <td>{{ entity.destinatario }}</td>
+            </tr>
+            {% else %}
+                <tr>
+                    <th>Remitente</th>
+                    <td>{{ entity.remitente }}</td>
+                </tr>
+            {% endif %}
+            <tr>
+                <th>Fecha de envio</th>
+                <td>{{ entity.fechaEnvio|date('Y-m-d') }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        {% if buzon == "entrada" %}
+        {% set listado = "mensaje" %}
+        {% else %}
+        {% set listado = "mensajes_enviados" %}
+        {% endif %}
+
+        <div id="control">
+        {{ include("::regre_edit_elim.html.twig") }}
+        </div>
+        
+{% endblock %}

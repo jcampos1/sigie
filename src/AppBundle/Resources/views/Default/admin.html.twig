@@ -1,0 +1,58 @@
+{% extends "::base2.html.twig" %}
+
+{% block administracion %}
+    <label>
+        <h1><small>MÓDULO DE ADMINISTRACIÓN</small></h1>
+    </label>
+    <div class="row">
+    	<a href="{{ path('unidad')}}">
+        <div class="col-sm-6 col-md-6">
+            <div class="thumbnail">
+              <img class="img-responsive" src="{{ asset('images/unidad.jpg') }}" alt="Unidad Temática">
+                  <div class="caption text-center">
+                      <h3>Unidades Temáticas</h3>
+                      <p>La unidad está diseñada para enseñar temáticamente y/u ofrecer práctica en habilidades de todas las áreas temáticas.</p>
+                  </div>
+            </div>
+        </div>
+        </a>
+
+        <a href="{{ path('subtema')}}">
+        <div class="col-sm-6 col-md-6">
+            <div class="thumbnail">
+                <img class="img-responsive" src="{{ asset('images/subtemas.png') }}" alt="Subtemas">
+                <div class="caption text-center">
+                    <h3>Subtemas</h3>
+                    <p>Son los diferentes aspectos de un tema. Se refiere a todos aquellos contenidos impartidos en la asignatura puntualmente para cubrir un tema en cuestion</p>
+
+                </div>
+            </div>
+        </div>
+        </a>
+
+        <a href="{{ path('complejidad')}}">
+        <div class="col-sm-6 col-md-6">
+            <div class="thumbnail">
+                <img class="img-responsive" src="{{ asset('images/complejidad.jpg') }}" alt="Subtemas">
+                <div class="caption text-center">
+                    <h3>Complejidades</h3>
+                    <p>Establezca distintas complejidades para los ejercicios que usted desarrolle. Las complejidades aportan un nivel de dificultad a los instrumentos generados.</p>
+
+                </div>
+            </div>
+        </div>
+        </a>
+        <a href="{{ path('user')}}">
+        <div class="col-sm-6 col-md-6">
+            <div class="thumbnail">
+                <img class="img-responsive" src="{{ asset('images/usuarios.png') }}" alt="Subtemas">
+                <div class="caption text-center">
+                    <h3>Usuarios</h3>
+                    <p>Gestione los usuarios del sistema. Podrá tener un control sobre los usuarios que usan la aplicacion.</p>
+
+                </div>
+            </div>
+        </div>
+        </a>
+    </div>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends '::base.html.twig' %}
+{% block title %}Editar-Evaluación{% endblock %}
+{% block body -%}
+    <h1>Evaluacion edit</h1>
+
+    {{ form(edit_form) }}
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('evaluacion') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>{{ form(delete_form) }}</li>
+</ul>
+{% endblock %}

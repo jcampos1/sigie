@@ -1,0 +1,83 @@
+{% extends '::base2.html.twig' %}
+
+{% block body -%}
+	<h1><small>NUEVO MENSAJE</small></h1>
+    <div class="text-right">
+	    <ul class="record_actions list-inline">
+			<li>
+				<a href="{{ path('mensaje') }}">
+				    Regresar a bandeja de entrada
+				</a>
+			</li>
+		</ul>
+	</div>
+	
+    {{ form_start(form, { "attr": { "id": "myForm" }}) }}
+    	<input type="hidden" id="destinatarios" name="destinatarios" value=""> 
+    	<div class="row">
+			<div class="col-sm-6">
+				<div class="form-group">
+			        {{ form_label(form.asunto) }}
+			        {{ form_errors(form.asunto) }}
+			        {{ form_widget(form.asunto, { 'attr': {'class': 'form-control'} }) }}
+			    </div>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group">
+			        {{ form_label(form.destinatario) }}
+			        {{ form_errors(form.destinatario) }}
+			        {{ form_widget(form.destinatario,{ 'attr': {'class': 'form-control'} }) }}
+			    </div>
+			</div>
+		</div>
+    	
+	    {{ form_row(form.descripcion) }}
+	    <br/>
+		 <div class="text-center">
+	    	<input type="submit" class="btn btn-primary btn-lg" value="Enviar" id="crear_mensaje" />
+
+	    	<button type="button" id="cancelarEvaluacion"  class="btn btn-danger btn-lg"><span class="glyphicon glyphicon-eye-close"></span><a  style='text-decoration:none;color:white;' href="{{ path('mensaje') }}"> Cancelar </a></button>
+
+		</div>
+
+		<div style="display:none">
+			{{ form_rest(form) }}
+		</div>
+    {{ form_end(form) }}
+    <br/><br/>
+
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	<script>
+	$(document).ready(function(){
+
+	    $("#mensajebundle_mensaje_destinatario").select2({
+		   placeholder: "Seleccione destinatario(s)",
+		   allowClear: true
+		});
+
+		var destinatarios = {};
+
+		$('#myForm').on("submit", function(e){
+            $('#myForm').off("submit");
+            e.preventDefault();
+
+            var j=1;
+            var dest;
+        	//estas son las complejidades que hay que verificar
+        	$("#mensajebundle_mensaje_destinatario option:selected").each(function() {	
+        		dest = $(this).val();
+	        	destinatarios[j] = dest;
+	        	j++;		
+			});
+			$("#destinatarios").val(JSON.stringify(destinatarios));
+			 $("#myForm").submit();
+    
+    	});
+
+
+	});
+	</script>
+{% endblock %}

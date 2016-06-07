@@ -1,0 +1,256 @@
+<?php
+
+namespace MensajeBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
+
+/**
+ * Mensaje
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="MensajeBundle\Entity\MensajeRepository")
+ */
+class Mensaje
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     * @Assert\NotBlank(message = "El campo 'asunto' no puede estar vacio")
+     * @ORM\Column(name="asunto", type="string", length=255)
+     */
+    private $asunto;
+
+    /**
+     * @var string
+     * @Assert\NotBlank(message = "El campo 'descripción' no puede estar vacio")
+     * @ORM\Column(name="descripcion", type="text")
+     */
+    private $descripcion;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="estado", type="boolean")
+     */
+    private $estado;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="tipo", type="boolean")
+     */
+    private $tipo;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha_envio", type="datetime")
+     */
+    private $fechaEnvio;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="destinatario_id", referencedColumnName="id", nullable=false)
+     */
+    private $destinatario;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="remitente_id", referencedColumnName="id", nullable=false)
+     */
+    protected $remitente;
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set asunto
+     *
+     * @param string $asunto
+     *
+     * @return Mensaje
+     */
+    public function setAsunto($asunto)
+    {
+        $this->asunto = $asunto;
+
+        return $this;
+    }
+
+    /**
+     * Get asunto
+     *
+     * @return string
+     */
+    public function getAsunto()
+    {
+        return $this->asunto;
+    }
+
+    /**
+     * Set descripcion
+     *
+     * @param string $descripcion
+     *
+     * @return Mensaje
+     */
+    public function setDescripcion($descripcion)
+    {
+        $this->descripcion = $descripcion;
+
+        return $this;
+    }
+
+    /**
+     * Get descripcion
+     *
+     * @return string
+     */
+    public function getDescripcion()
+    {
+        return $this->descripcion;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param boolean $estado
+     *
+     * @return Mensaje
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return boolean
+     */
+    public function getEstado()
+    {
+        return $this->estado;
+    }
+
+    /**
+     * Set fechaEnvio
+     *
+     * @param \DateTime $fechaEnvio
+     *
+     * @return Mensaje
+     */
+    public function setFechaEnvio($fechaEnvio)
+    {
+        $this->fechaEnvio = $fechaEnvio;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaEnvio
+     *
+     * @return \DateTime
+     */
+    public function getFechaEnvio()
+    {
+        return $this->fechaEnvio;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+    }
+
+    /**
+     * Set remitente
+     *
+     * @param \UserBundle\Entity\User $remitente
+     *
+     * @return Mensaje
+     */
+    public function setRemitente(\UserBundle\Entity\User $remitente = null)
+    {
+        $this->remitente = $remitente;
+
+        return $this;
+    }
+
+    /**
+     * Get remitente
+     *
+     * @return \UserBundle\Entity\User
+     */
+    public function getRemitente()
+    {
+        return $this->remitente;
+    }
+
+    /**
+     * Set destinatario
+     *
+     * @param \UserBundle\Entity\User $destinatario
+     *
+     * @return Mensaje
+     */
+    public function setDestinatario(\UserBundle\Entity\User $destinatario)
+    {
+        $this->destinatario = $destinatario;
+
+        return $this;
+    }
+
+    /**
+     * Get destinatario
+     *
+     * @return \UserBundle\Entity\User
+     */
+    public function getDestinatario()
+    {
+        return $this->destinatario;
+    }
+
+    /**
+     * Set tipo
+     *
+     * @param boolean $tipo
+     *
+     * @return Mensaje
+     */
+    public function setTipo($tipo)
+    {
+        $this->tipo = $tipo;
+
+        return $this;
+    }
+
+    /**
+     * Get tipo
+     *
+     * @return boolean
+     */
+    public function getTipo()
+    {
+        return $this->tipo;
+    }
+}

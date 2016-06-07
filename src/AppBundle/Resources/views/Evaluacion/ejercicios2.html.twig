@@ -1,0 +1,50 @@
+<!-- Este campo indica que ejercicios se deben actualizar y el value depende de la modalidad -->
+<input type="hidden" id="ids_ejer" name="ids_ejer" form="generarWord" value="{{ ids_ejer }}"  />
+
+<div id="ejerc_seleccionados_manual" class="table-responsive" style="overflow-x:scroll">          
+	<table class="table table-striped">
+	    <thead>
+	      <tr>
+	        <th>Id</th>
+	        <th>Descripción</th>
+	      </tr>
+	    </thead>
+	    <tbody id="filas_ejercicios">	
+	    	{% for ejercicio in pagination %}
+	    	<div class="controles_fila" id="div_ejer_{{ ejercicio.id }}" >
+	    	  <tr>
+	    	  		<td></td>
+	    	  		<td>
+	    	  			<em><strong>Ejercicio 
+	    	  			{% if ejercicio.componente == "teorico" %}
+	    	  				Teórico
+	    	  			{% else %}
+	    	  				Práctico
+	    	  			{% endif %}
+	    	  			 / {{ ejercicio.unidad }}
+	    	  			{% if modalidad == 'manual' %}
+	    	  				/
+	    	  				<a id="{{ ejercicio.id }}" class="btnAgregar" href="#"><span style="font-size:25px;" class="glyphicon glyphicon-plus-sign"></span></a>
+	    	  			{% endif %}
+	    	  			</strong></em>
+	    	  		</td>
+	    	  </tr>
+		      <tr class="{{ ejercicio.id }}">
+		        <td><div name="idsEjercicios">
+		        <a target="_blank" href="{{ path('ejercicio_show', { 'id': ejercicio.id }) }}">{{ ejercicio.id }}</a>
+		        </div></td>
+		        <td>{{ ejercicio.descripcion | raw }}</td>
+		      </tr>
+		    </div>
+		     {% endfor %}  	
+	    </tbody>
+    </table>
+    <div class="paginacion">
+    	{{ knp_pagination_render(pagination) }}
+	</div>
+</div>
+<script>
+$(document).ready(function(){
+	
+});
+</script>

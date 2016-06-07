@@ -1,0 +1,108 @@
+{% extends '::base2.html.twig' %}
+
+{% block body -%}
+	{% for flashMessage in app.session.flashbag.get('mensaje') %}
+        <div class="alert alert-success text-center">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+	<div class="row text-center">
+		<div class="col-sm-6">
+			<h1><a href="{{ path('mensaje') }}">Bandeja de entrada</a></h1> 
+        </div>
+        <div class="col-sm-6">
+			<h1><a href="{{ path('mensajes_enviados') }}">Bandeja de salida</a></h1> 
+        </div>
+	</div>
+    
+    <div class="text-right">
+        <h3><small><em>Cantidad de mensajes: {{ pagination.getTotalItemCount }}</h3></small></em>
+    </div>
+    <button type="button" id="eliminar" class="btn btn-danger"> 
+        <span class="glyphicon glyphicon-remove"></span> Eliminar
+    </button>
+    <table class="records_list table table-striped">
+        <thead>
+            <tr>
+            	<th></th>
+                <th>Asunto</th>
+                <th>Fecha de envio</th>
+                <th>Estado</th>
+                <th>Accion(es)</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in pagination %}
+            <tr id="{{ entity.id }}">
+            	<td><input type="checkbox" id="{{ entity.id }}" name="mensajes[]" /></th>
+                <td>{{ entity.asunto }}</td>
+                <td>{% if entity.fechaEnvio %}{{ entity.fechaEnvio|date('Y-m-d H:i:s') }}{% endif %}</td>
+                {% if entity.estado == true %}
+                <td>Leido</td>
+                {% else %}
+                <td>No leido</td>
+                {% endif %}
+                <td>
+                <ul>
+                	<li>
+                        <a href="{{ path('mensaje_show', { 'id': entity.id }) }}">
+                            <button type="submit" class="btn btn-info btn-xs"> 
+                                <span class="glyphicon glyphicon-eye-open"></span> Leer
+                            </button>
+                        </a>
+                    </li>
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div class="paginacion">
+        {{ knp_pagination_render(pagination) }}
+    </div>
+    <div class="text-right">
+        <ul>
+            <li>
+                <a href="{{ path('mensaje_new') }}">
+                    <button type="submit" class="btn btn-primary btn-lg"> 
+                        <span class="glyphicon glyphicon-plus-sign"></span> Crear mensaje
+                    </button>
+                </a>
+            </li>
+        </ul>
+    </div>
+    {% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	<script>
+		$(document).ready(function(){
+            function confirmacion(){
+                return confirm("¿Está seguro que desea eliminar el/los elemento(s) seleccionado(s)?");
+            }
+			$("#eliminar").click(function(){
+                if(confirmacion()){
+    				i = 1;
+    				var myObj = {};
+    				$("input[name='mensajes[]']:checked").each(function() {
+    		        	myObj[i] = $(this).attr("id");
+    		        	$("tr#"+$(this).attr("id")).remove();
+    		        	i++;
+    	        	});
+    	        	if( i == 1 ){
+    	        		alert("No hay mensajes seleccionados");
+    	        	}else{
+    	        		$.ajax({
+    			            url : "{{ path('eliminar_mensajes') }}",
+    			            type: "POST",
+    			            data: { "mensajes": JSON.stringify(myObj) },
+    			            success: function(e) {
+    			            }
+    			        });
+    	        	}
+                }
+			});
+
+		});
+	</script>
+{% endblock javascripts %}

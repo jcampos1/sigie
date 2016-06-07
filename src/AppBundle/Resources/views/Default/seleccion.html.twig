@@ -1,0 +1,17 @@
+{% extends "::base2.html.twig" %}
+
+{% block body %}
+    <h1><small>¿QUÉ TIPO DE EVALUACIÓN DESEA GENERAR?</small></h1>
+    <h2></h2>
+    <div class="row seleccion">
+        <div id="parcial" class="col-sm-12">
+            <br>
+            <h2><a href="{{ path('evaluacion_new', {'modalidad': "auto"}) }}">Automática</a></h2>
+            <h2><em>Con pocos parámetros de configuración, genere su evaluación fácilmente.</em></h2>
+            <br>
+            <h2><a href="{{ path('evaluacion_new', {'modalidad': "manual"}) }}">Manual</a></h2>
+            <h2><bold><em>Seleccione los ejercicios para su instrumento de evaluación.</em></bold></h2>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,437 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
+
+/**
+ * Ejercicio
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="AppBundle\Entity\EjercicioRepository")
+ */
+class Ejercicio
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     * @Assert\NotBlank(message = "El campo 'descripción' no puede estar vacio")
+     * @ORM\Column(name="descripcion", type="text", nullable=false)
+     */
+    private $descripcion;
+
+    /**
+     * @var string
+     * @Assert\NotBlank(message = "El campo 'componente' no puede estar vacio")
+     * @ORM\Column(name="componente", type="string", length=255, nullable=false)
+     */
+    private $componente;
+
+    /**
+     * @var string
+     * @Assert\NotBlank(message = "El campo 'asignatura' no puede estar vacio")
+     * @Assert\Choice(choices = {"EDI", "EDII"}, message = "Debe seleccionar la asignatura")
+     * @ORM\Column(name="asignatura", type="string", length=255)
+     */
+    private $asignatura;
+
+    /**
+     * @var \DateTime
+     * @ORM\Column(name="fecha_creacion", type="date")
+     */
+    private $fechaCreacion;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha_ultimo_uso", type="date")
+     */
+    private $fechaUltimoUso;
+
+    /**
+     * @var string
+     * @Assert\NotBlank(message = "el campo 'visibilidad' no puede estar vacio")
+     * @Assert\Choice(choices = {"privado", "publico"}, message = "Debe seleccionar si el ejercicio es privado o público")
+     * @ORM\Column(name="visibilidad", type="string", length=255, nullable=false)
+     */
+    private $visibilidad;
+
+    /**
+     * @var string
+     * @ORM\Column(name="solucion", type="text", nullable=true)
+     */
+    private $solucion;
+
+    /**
+     * @Assert\NotNull(message = "Debe seleccionar al menos una complejidad")
+     * @ORM\ManyToMany(targetEntity="Complejidad", inversedBy="ejercicios")
+     * @ORM\JoinTable(name="ejercicio_complejidad",
+     *      joinColumns={@ORM\JoinColumn(name="ejercicio_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="complejidad_id", referencedColumnName="id")}
+     *      )
+     */
+    private $complejidades;
+
+    /**
+     * @Assert\NotBlank(message = "El campo 'unidad' no puede estar vacio")
+     * @ORM\ManyToOne(targetEntity="Unidad", inversedBy="ejercicios")
+     * @ORM\JoinColumn(name="unidad_id", referencedColumnName="id")
+     */
+    protected $unidad;
+
+    /**
+     * @Assert\NotBlank(message = "El campo 'subtema' no puede estar vacio")
+     * @ORM\ManyToOne(targetEntity="Subtema", inversedBy="ejercicios")
+     * @ORM\JoinColumn(name="subtema_id", referencedColumnName="id")
+     */
+    protected $subtema;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="UserBundle\Entity\User", inversedBy="ejercicios")
+     * @ORM\JoinColumn(name="usuario_id", referencedColumnName="id", nullable=true)
+     */
+    protected $usuario;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Evaluacion", mappedBy="ejercicios")
+     */
+    private $evaluaciones;
+
+
+    public function __construct() {
+        $this->complejidades = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return strval($this->id);
+    }
+    
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set componente
+     *
+     * @param string $componente
+     *
+     * @return Ejercicio
+     */
+    public function setComponente($componente)
+    {
+        $this->componente = $componente;
+
+        return $this;
+    }
+
+    /**
+     * Get componente
+     *
+     * @return string
+     */
+    public function getComponente()
+    {
+        return $this->componente;
+    }
+
+    /**
+     * Set fechaCreacion
+     *
+     * @param \DateTime $fechaCreacion
+     *
+     * @return Ejercicio
+     */
+    public function setFechaCreacion($fechaCreacion)
+    {
+        $this->fechaCreacion = $fechaCreacion;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaCreacion
+     *
+     * @return \DateTime
+     */
+    public function getFechaCreacion()
+    {
+        return $this->fechaCreacion;
+    }
+
+    /**
+     * Set visibilidad
+     *
+     * @param string $visibilidad
+     *
+     * @return Ejercicio
+     */
+    public function setVisibilidad($visibilidad)
+    {
+        $this->visibilidad = $visibilidad;
+
+        return $this;
+    }
+
+    /**
+     * Get visibilidad
+     *
+     * @return string
+     */
+    public function getVisibilidad()
+    {
+        return $this->visibilidad;
+    }
+
+    /**
+     * Add complejidade
+     *
+     * @param \AppBundle\Entity\Complejidad $complejidade
+     *
+     * @return Ejercicio
+     */
+    public function addComplejidade(\AppBundle\Entity\Complejidad $complejidade)
+    {
+        $this->complejidades[] = $complejidade;
+
+        return $this;
+    }
+
+    /**
+     * Remove complejidade
+     *
+     * @param \AppBundle\Entity\Complejidad $complejidade
+     */
+    public function removeComplejidade(\AppBundle\Entity\Complejidad $complejidade)
+    {
+        $this->complejidades->removeElement($complejidade);
+    }
+
+    /**
+     * Get complejidades
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getComplejidades()
+    {
+        return $this->complejidades;
+    }
+
+    /**
+     * Set subtema
+     *
+     * @param \AppBundle\Entity\Subtema $subtema
+     *
+     * @return Ejercicio
+     */
+    public function setSubtema(\AppBundle\Entity\Subtema $subtema = null)
+    {
+        $this->subtema = $subtema;
+
+        return $this;
+    }
+
+    /**
+     * Get subtema
+     *
+     * @return \AppBundle\Entity\Subtema
+     */
+    public function getSubtema()
+    {
+        return $this->subtema;
+    }
+
+    /**
+     * Set usuario
+     *
+     * @param \UserBundle\Entity\User $usuario
+     *
+     * @return Ejercicio
+     */
+    public function setUsuario(\UserBundle\Entity\User $usuario = null)
+    {
+        $this->usuario = $usuario;
+
+        return $this;
+    }
+
+    /**
+     * Get usuario
+     *
+     * @return \UserBundle\Entity\User
+     */
+    public function getUsuario()
+    {
+        return $this->usuario;
+    }
+
+    /**
+     * Set unidad
+     *
+     * @param \AppBundle\Entity\Unidad $unidad
+     *
+     * @return Ejercicio
+     */
+    public function setUnidad(\AppBundle\Entity\Unidad $unidad = null)
+    {
+        $this->unidad = $unidad;
+
+        return $this;
+    }
+
+    /**
+     * Get unidad
+     *
+     * @return \AppBundle\Entity\Unidad
+     */
+    public function getUnidad()
+    {
+        return $this->unidad;
+    }
+
+    /**
+     * Add evaluacione
+     *
+     * @param \AppBundle\Entity\Evaluacion $evaluacione
+     *
+     * @return Ejercicio
+     */
+    public function addEvaluacione(\AppBundle\Entity\Evaluacion $evaluacione)
+    {
+        $this->evaluaciones[] = $evaluacione;
+
+        return $this;
+    }
+
+    /**
+     * Remove evaluacione
+     *
+     * @param \AppBundle\Entity\Evaluacion $evaluacione
+     */
+    public function removeEvaluacione(\AppBundle\Entity\Evaluacion $evaluacione)
+    {
+        $this->evaluaciones->removeElement($evaluacione);
+    }
+
+    /**
+     * Get evaluaciones
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEvaluaciones()
+    {
+        return $this->evaluaciones;
+    }
+
+    /**
+     * Set fechaUltimoUso
+     *
+     * @param \DateTime $fechaUltimoUso
+     *
+     * @return Ejercicio
+     */
+    public function setFechaUltimoUso($fechaUltimoUso)
+    {
+        $this->fechaUltimoUso = $fechaUltimoUso;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaUltimoUso
+     *
+     * @return \DateTime
+     */
+    public function getFechaUltimoUso()
+    {
+        return $this->fechaUltimoUso;
+    }
+
+    /**
+     * Set solucion
+     *
+     * @param string $solucion
+     *
+     * @return Ejercicio
+     */
+    public function setSolucion($solucion)
+    {
+        $this->solucion = $solucion;
+
+        return $this;
+    }
+
+    /**
+     * Get solucion
+     *
+     * @return string
+     */
+    public function getSolucion()
+    {
+        return $this->solucion;
+    }
+
+    /**
+     * Set descripcion
+     *
+     * @param string $descripcion
+     *
+     * @return Ejercicio
+     */
+    public function setDescripcion($descripcion)
+    {
+        $this->descripcion = $descripcion;
+
+        return $this;
+    }
+
+    /**
+     * Get descripcion
+     *
+     * @return string
+     */
+    public function getDescripcion()
+    {
+        return $this->descripcion;
+    }
+
+    /**
+     * Set asignatura
+     *
+     * @param string $asignatura
+     *
+     * @return Ejercicio
+     */
+    public function setAsignatura($asignatura)
+    {
+        $this->asignatura = $asignatura;
+
+        return $this;
+    }
+
+    /**
+     * Get asignatura
+     *
+     * @return string
+     */
+    public function getAsignatura()
+    {
+        return $this->asignatura;
+    }
+}

@@ -1,0 +1,30 @@
+<ul class="record_actions list-inline">
+    <li>
+        <a href="{{ path(listado) }}" class="btn btn-success" role="button">
+        <span class="glyphicon glyphicon-repeat"></span>
+        Regresar</a>
+    </li>
+    {% if editar is defined %}
+    <li>
+        <a href="{{ path(editar, { 'id': entity.id }) }}">
+            <button type="submit" class="btn btn-primary"> 
+                <span class="glyphicon glyphicon-wrench"></span> Editar
+            </button>
+        </a>
+    </li>
+    {% endif %}
+    {% if is_granted('ROLE_SUPER_ADMIN') or listado=='mensaje' %}
+    <li>
+        {{ form_start(delete_form, { "attr": { "id": "myForm" }}) }}
+            <button type="submit" class="btn btn-danger" id="eliminar"> 
+                <span class="glyphicon glyphicon-remove"></span> Eliminar
+            </button>
+
+            <div style="display: none">
+                {{ form_rest(delete_form) }}
+            </div>    
+        {{ form_end(delete_form) }}
+    </li>
+    {% endif %}
+</ul>
+

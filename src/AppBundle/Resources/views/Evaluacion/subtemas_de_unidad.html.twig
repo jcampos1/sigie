@@ -1,0 +1,15 @@
+<ul style="list-style:none">
+{% for subtema in subtemas %}
+	<li>
+		<div id="div">
+		  <label id="label">
+		    <input type="checkbox" class="ch" name="subtema[]" value="{{ subtema.id }}" id="{{ subtema.id }}{{ componente }}">
+		    {{ subtema.nombre }}
+		    {% if modalidad != 'manual' %}
+		    	<input type="number" id="cant{{ subtema.id }}{{ componente }}" name="cantidad[]" min="1" max="4" step="1" value="0">
+		    {% endif %}
+		  </label>
+		</div>
+	</li>
+{% endfor %}
+</ul>

@@ -1,0 +1,531 @@
+{% extends "::base2.html.twig" %}
+	{% block title %}Nueva-Evaluación{% endblock %}
+	{% block left_sidebar %}
+		<div id="parametros">
+			{% if modalidad == 'manual' %}
+				<h2><small>MODALIDAD MANUAL</small></h2>
+		    {% else %}
+		    	<h2><small>MODALIDAD AUTOMÁTICA</small></h2>
+		    {% endif %}
+
+			<div id="aviso" class="alert alert-danger alert-dismissable">
+			  <button type="button" class="close" data-dismiss="alert">&times;</button>
+			  <strong>¡Aviso!</strong> Debe seleccionar al menos un subtema.
+			</div>
+			<div id="aviso2" class="alert alert-danger alert-dismissable">
+			  <button type="button" class="close" data-dismiss="alert">&times;</button>
+			  <strong>¡Aviso!</strong> Debe seleccionar al menos una complejidad
+			</div>
+		    {{ form_start(form) }}
+			{{ form_errors(form) }}
+			    <div class="form-group">
+			        {{ form_label(form.asignatura) }}
+			        {{ form_errors(form.asignatura) }}
+			        {{ form_widget(form.asignatura, { 'attr': {'class': 'form-control'} }) }}
+			    </div>
+			    <div class="form-group">
+			        {{ form_label(form.tipo) }}
+			        {{ form_errors(form.tipo) }}
+			        {{ form_widget(form.tipo, { 'attr': {'class': 'form-control'} }) }}
+			    </div>
+			    <div id="unidades">
+				    <div id="teorico">
+				    </div>
+				    <div id="practico">
+			    	</div>
+			    </div>
+			    <br/>
+			    <div id="complejidades">
+			    	<div class="form-group">
+				        {{ form_label(form.Complejidad) }}
+				        {{ form_errors(form.Complejidad) }}
+				        {{ form_widget(form.Complejidad, { 'attr': {'class': 'form-control'} }) }}
+	    			</div>
+			    </div>
+			    <div style="display:none">
+			    	{{ form_rest(form) }}
+			    </div>
+
+				<button type="button" id="vista_previa"  class="form-control btn btn-primary"><span class="glyphicon glyphicon-eye-open"></span> Vista Previa </button>
+				<br/><br/>
+
+				<button type="button" id="cancelarEvaluacion"  class="form-control pull-right btn btn-danger"><span class="glyphicon glyphicon-eye-close"></span><a style='text-decoration:none;color:white;' href="{{ path('seleccion') }}"> CANCELAR </a></button>
+			    
+			{{ form_end(form) }}	
+		</div>
+	{% endblock left_sidebar %}
+
+	{% block right_sidebar %}
+		{% if modalidad == "manual" %}
+			<br/>
+			<div class="row" >
+		        <div class="col-lg-7"></div>
+		        <div class="col-lg-5">
+		            <div class="input-group">
+		                <input id="buscar2" type="text" class="form-control" placeholder="Filtre por Id, Componente o Asignatura">
+		                <span class="input-group-addon "><span class="glyphicon glyphicon-search"></span>Buscar</span>
+		            </div>
+		        </div>
+		    </div>
+	    {% endif %}
+		<div id="ejercicios">
+			{% if modalidad != "manual" %}
+			<h1><small><em>LISTA DE EJERCICIOS</small></em></h1>
+			{% endif %}
+		</div>
+	{% endblock right_sidebar %}
+
+	{% if modalidad == "manual" %}
+		{% block ejercicios_manual %}
+			<div id="ejercicios_seleccionados">
+			<h2><small><em>EJERCICIOS SELECCIONADOS</small></em></h2>
+			<div class="table-responsive" id="tablaManual">          
+				<table class="table table-striped">
+				    <thead>
+				      <tr>
+				        <th>Id</th>
+				        <th>Descripción</th>
+				      </tr>
+				    </thead>
+				    <tbody id="ejer_sele">	
+				    	
+				    </tbody>
+			    </table>
+			</div>
+			</div>
+			<div id="">
+			</div>
+		{% endblock ejercicios_manual %}
+	{% endif %}
+
+	{% block controles %}
+		<hr>
+			<div id="info" style="display:none;">
+			<form id="generarWord" role="form" method="post" action="{{ path('generarWord') }}" onsubmit=" return asignarContenido('{{ modalidad }}')">	
+				<input type="hidden" id="contenido_evaluacion" name="contenido_evaluacion" value="">
+
+					<div class="row text-center">
+						<label>INFORMACIÓN PARA INSTRUMENTO</label><br/>
+						<div class="col-sm-3"></div>
+						<div class="col-sm-6">
+							<div class="form-group">
+								<input class="form-control" type="text" id="titulo_evaluacion" name="titulo_evaluacion" title="Titulo de la Evaluación" placeholder="Titulo">
+							</div>
+						</div>
+						<div class="col-sm-3"></div>
+					</div> 
+
+					<div class="row">
+						<div class="col-sm-3"></div>
+						<div class="col-sm-1">
+							<div class="form-group">
+								<select class="form-control" id="tipo_evaluacion" name="tipo_evaluacion">
+									<option disabled selected>Tipo</option>
+									<option>Práctica</option>
+									<option>Taller</option>
+									<option>Quiz</option>
+									<option>Parcial</option>
+									<option>Proyecto</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-sm-5">
+							<div class="form-group">
+								<input class="form-control" type="date" id="fecha_evaluacion" name="fecha_evaluacion" title="Fecha de la Evaluación"  placeholder="aaaa-mm-dd">
+							</div>
+						</div>
+						<div class="col-sm-3"></div>
+					</div>
+
+					<div class="row">
+						<div class="col-sm-3"></div>
+						<div class="col-sm-2">
+							<div class="form-group">
+								<button type="submit" id="generar"  class="form-control pull-right btn btn-primary"><span class="glyphicon glyphicon-file"></span> CUESTIONARIO </button>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="form-group">
+								<button type="submit" form="formularioSolucion" id="solucion"  class="form-control pull-right btn btn-success"><span class="glyphicon glyphicon-file"></span> SOLUCIÓN </button>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<button type="button" id="cancelarEvaluacion"  class="form-control pull-right btn btn-danger"><span class="glyphicon glyphicon-eye-close"></span><a style='text-decoration:none;color:white;' href="{{ path('seleccion') }}"> CANCELAR </a></button>
+						</div>
+						<div class="col-sm-3"></div>
+					</div> 
+					
+					
+				</form>
+				<form method="post" id="formularioSolucion" action="{{ path('solucionWord') }} " class="form-inline" role="form">
+					<input type="hidden" id="ids" name="ids" value=""> 
+				</form>
+			</div>
+	{% endblock %}
+
+	{% block info_bar %}
+		
+
+	{% endblock info_bar %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<style type="text/css">
+		input[type="number"]{
+			visibility: hidden;
+		}
+	</style>
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+
+	<script>
+		//evento para cargar los subtemas de una unidad seleccionada
+		//evento para cargar los subtemas de una unidad seleccionada
+$(document).ready(function(){
+	
+	//funciones ejecutadas al cargar el DOM
+	ajax(creatObjAjax("teorico", $("#{{ form.asignatura.vars.id }}").val()));
+	$("#aviso").hide();
+	$("#aviso2").hide();
+
+	if("{{ modalidad }}" == "auto"){
+		$("#tablaManual").hide();
+		$("#ejercicios_seleccionados").hide();
+	}
+	//array asociativo global para almacenar todos los ids de los ejercicios seleccionados en modalidad manual
+	var ids_ejer_sele = {};
+	var bandera = false;
+	var pagina ="";
+
+
+	$("select").select2();
+	
+	$("#appbundle_evaluacion_Complejidad").select2({
+	   placeholder: "Seleccione complejidad(es)",
+	   allowClear: true
+	});	
+
+	$('#buscar2').keyup(function(key)
+    {
+        if ($(this).val().length >= 1 || $(this).val() == '')
+        {
+            $.ajax({
+                url : "{{ path('buscar_ejercicios') }}",
+                type: "POST",
+                data : { texto: $(this).val() },
+                success: function(html) {
+                    $("#ejercicios").html(html);
+                    $("#info").show();
+                }
+            });
+        }
+    });
+
+    $("#ejercicios").on("click","#ejerc_seleccionados_manual .pagination li a", function(e){
+	    $("#ejercicios").html("Cargando ejercicios...");
+	    page2 = $(this).attr("href");
+	    //se obtiene el ultimo caracter, que hace referencia al numero de pagina
+		page2 = page2.substring(page2.length-1, page2.length);
+	    text = $('#buscar2').val();
+	    e.preventDefault();
+	    $.ajax({
+            url : "{{ path('buscar_ejercicios') }}",
+            type: "POST",
+            data : { texto: text, page: page2 },
+            success: function(html) {
+                $("#ejercicios").html(html);
+                $("#info").show();
+            }
+        });
+	});
+
+    $("#ejercicios").on("click","#identificador .pagination li a", function(e){
+	    $("#ejercicios").html("Cargando ejercicios...");
+	    bandera = true;
+	    pagina = $(this).attr("href");
+	    e.preventDefault();
+	    $('#vista_previa').trigger('click');
+	});
+
+	//funcion para agregar un ejercicios a la tabla de ejercicios seleccionados
+	$("#ejercicios").on('click', 'a.btnAgregar', function(e){
+  		e.preventDefault();
+
+		idElem = "#tr_control1_sele_" + $(this).attr("id");
+
+		//se pregunta si el elemento existe, para saber si ya ha sido agregado
+  		if( $(idElem).length ){
+  			alert("El ejercicio ya ha sido seleccionado");
+		}else{
+			ids_ejer_sele[$(this).attr("id")] = $(this).attr("id");
+			$.ajax({
+				url : "{{ path('fila_seleccionada') }}",
+				type: "POST",
+				data : { id: $(this).attr("id") },
+				success: function(html) {
+					$(html).appendTo($("#ejer_sele"));
+				}
+			});
+		}
+  	});
+
+  	$("#solucion").on("click", function(){
+  		asignarContenido('{{ modalidad }}');
+		
+  	});
+
+  	$("#ejer_sele").on('click', 'a.btnQuitar', function(e){
+  		e.preventDefault();
+  		tr1 = "#tr_control1_" + $(this).attr("id"); 
+  		tr2 = "#tr_control2_" + $(this).attr("id");
+  		//El id de los ejercicios esta formado por el pefijo sele_id, se elimina el prefijo sele_
+  		var cadena = $(this).attr("id");
+  		idEjer = cadena.substring(5);
+  		delete ids_ejer_sele[idEjer];
+  		$(tr1).remove();
+  		$(tr2).remove();
+
+  	});
+
+	$("#unidades").on( 'change', ".checkUnidades", function() {
+		//div contenedor del checkbox seleccionado
+		div_comp = $(this).parent().parent().parent();
+		
+		result = '#subtema_unidad'+$(this).val()+"_"+div_comp.attr("id");
+		if( $(this).is(':checked') ) {
+			if ($(result).text() == "") {
+				$.ajax({
+					url : "{{ path('subtemas_de_unidad') }}",
+					type: "POST",
+					data : { unidad: $(this).val(), componente: div_comp.attr("id") },
+					success: function(html) {
+						$(result).html(html);
+					}
+				});
+			}else{
+				$(result).show();
+			}
+		} else {
+			$(result).hide();
+		}
+	});
+
+	$("#generar").on( 'click', function() {
+		asignarContenido("{{ modalidad }}");
+	});
+
+	function asignarContenido(modalidad){
+		if(modalidad != 'manual'){
+			$("#contenido_evaluacion").val($("#filas_ejercicios").html());
+		}else{
+			$("#contenido_evaluacion").val($("#ejer_sele").html());
+			$("#ids_ejer").val(JSON.stringify(ids_ejer_sele));
+
+			//este campo pertenece al formulario de solucion
+			$("#ids").val(JSON.stringify(ids_ejer_sele));
+		}
+		return false;
+	}
+
+			//evento que muestra el input de las cantidades, dependiendo si el subtema asociado ha sido chequeado
+			$("#unidades").on('change', '.ch', function() {
+				
+				numberId = "cant"+$(this).attr("id");
+				if( $(this).prop('checked') ) {
+					$("#"+numberId).css("visibility", "visible");
+					$("#"+numberId).val("1");
+				}else{
+					$("#"+numberId).val("0");
+					$("#"+numberId).css("visibility", "hidden");
+				}
+			});
+
+			$("#vista_previa").on("click", function(){
+	        	//se obtienen las cantidades de ejercicios de los subtemas seleccionados
+	        	var i=1;
+	        	var myObj = {};
+
+	        	if( "{{ modalidad }}" !=  "manual" ){
+		        	$("input[name='cantidad[]']").each(function() {
+		        		cant = $(this).val();
+		        		if( cant != '0' && cant !='' ){
+		        			var myObjChild=
+			          		{
+			          			"cantidad": cant,
+			          		};
+		        			myObj[i] = myObjChild;
+		        			i++;
+		        		}
+		        	});
+		        }
+
+ 				var k=1;
+ 				if( "{{ modalidad }}" !=  "manual" ){
+			        $("input[name='subtema[]']:checked").each(function() {
+			        	sub_sele = $(this).val();		        	
+			            //comp: indica el componente al que pertenece el subtema
+			            comp = $(this).parent().parent().parent().parent().parent().parent().attr("id");
+			            
+			          	myObj[k]["subtema"] = sub_sele;
+			          	myObj[k]["componente"] = comp;
+
+			            k++;
+		        	});
+		        }else{
+		        	$("input[name='subtema[]']:checked").each(function() {
+			        	sub_sele = $(this).val();		        	
+			            //comp: indica el componente al que pertenece el subtema
+			            comp = $(this).parent().parent().parent().parent().parent().parent().attr("id");
+			            var myObjChild=
+			          		{
+			          			"subtema": sub_sele,
+			          			"componente": comp
+			          		};
+			          	myObj[k] = myObjChild;
+			            k++;
+		        	});
+		        }
+
+		        var indice = 1; 
+	        	if( "{{ modalidad }}" !=  "manual" ){
+	        		indice = i;
+	        	}else{
+	        		indice = k;
+	        	}
+	        	if( indice == 1 ){
+	        		$("#aviso").show();
+	        		$("#aviso").fadeOut(20000);
+	        	}
+
+	        	var myObj2 = {};
+	        	var j=1;
+	        	//estas son las complejidades que hay que verificar
+	        	$("#complejidades option:selected").each(function() {	
+	        		complejidad = $(this).val();
+		        	myObj2[j] = complejidad;
+		        	j++;		
+				});
+
+	        	
+		        if( j == 1 ){
+	        		$("#aviso2").show();
+	        		$("#aviso2").fadeOut(20000);
+	        	}        	
+
+	        	if( indice != 1 && j != 1 ){
+	        		$("#info").show();
+	        		var page="";
+	        		if(bandera = true){
+	        			//se obtiene el ultimo caracter, que hace referencia al numero de pagina
+	        			page = pagina.substring(pagina.length-1, pagina.length);
+	        			pagina = "";
+	        			bandera = false;
+	        		}
+		        	$.ajax({
+			            url : "{{ path('obt_ejercicios') }}",
+			            type: "POST",
+			            data: { "page": page, "datos": JSON.stringify(myObj), "complejidades": JSON.stringify(myObj2) },
+			            success: function(e) {
+			                // la variable html representa toda la página junto con el select de subtema.
+			                // el cual tomamos y colocamos para reemplazar el select actual.
+			                $('#ejercicios').html(e);
+			            }
+			        });
+			    }
+			});
+
+			//al elegir otra asignatura, se muestran las unidades del componente y asignatura seleccionados
+			$("#{{ form.asignatura.vars.id }}").on( 'change', function() {
+				asig= $("#{{ form.asignatura.vars.id }}").val();
+				componente= $("#{{ form.tipo.vars.id }}").val();
+				unidad_de_componente(asig, componente);
+			});
+			
+			$("#{{ form.tipo.vars.id }}").on( 'change', function() {
+				asig= $("#{{ form.asignatura.vars.id }}").val();
+				componente = $(this).val();
+				unidad_de_componente(asig, componente);
+			});
+
+			function unidad_de_componente(asig, componente){
+				if( componente == "teorico" ){
+					ajax(creatObjAjax("teorico", asig));
+				}else{
+					$("#{{ form.asignatura.vars.id }}").val();
+					if( componente == "practico" ){
+						ajax(creatObjAjax("practico", asig));
+					}else{
+						ajax(creatObjAjax("teorico_practico", asig));
+					}
+				}  
+			}
+	
+	function ajax(calls){
+		$.when($.ajax(calls[0].properties)).then(function(res){
+			calls[0].callback(res);
+			calls.splice(0, 1);
+			if (calls.length) ajax(calls);
+		});
+	}
+
+	function creatObjAjax(comp, asig){
+		if(comp == "teorico" || comp == "practico"){
+			var obj= [{properties: {
+					url: "{{ path('unidad_de_componente') }}",
+					type: "POST",
+					data: {
+						componente: comp,
+						asignatura: asig
+					}
+				},
+				callback: function(r){
+					$('#'+comp).html(r);
+					$('#'+comp).show();
+					if(comp == "teorico"){
+						$('#practico').hide();
+					}else{
+						$('#teorico').hide();
+					}
+				}
+			}];
+		}else{
+			var obj= [{properties: {
+						url: "{{ path('unidad_de_componente') }}",
+						type: "POST",
+						data: {
+							componente: "teorico",
+							asignatura: asig
+						}
+					},
+					callback: function(r){
+						$('#teorico').html(r);
+						$('#teorico').show();
+					}
+				},
+				{properties: {
+						url: "{{ path('unidad_de_componente') }}",
+						type: "POST",
+						data: {
+							componente: "practico",
+							asignatura: asig
+						}
+					},
+					callback: function(r){
+						$('#practico').html(r);
+						$('#practico').show();
+						//Instrucciones
+					}
+				}
+			];
+		}
+		return obj;
+	}
+
+	//FUNCIONES EMPLEADAS EN LA MODALIDAD MANUAL
+});
+
+		</script>
+
+{% endblock %}

@@ -1,0 +1,16 @@
+# This file is auto-generated during the composer install
+parameters:
+    database_driver: pdo_mysql
+    database_host: localhost
+    database_port: null
+    database_name: sigie
+    database_user: root
+    database_password: 22204356
+    mailer_transport: gmail
+    mailer_host: smtp.gmail.com
+    mailer_auth_mode: login
+    mailer_encryption: ssl
+    mailer_user: null
+    mailer_password: null
+    locale: en
+    secret: ThisTokenIsNotSoSecretChangeIt

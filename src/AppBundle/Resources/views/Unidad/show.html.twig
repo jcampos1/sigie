@@ -1,0 +1,39 @@
+{% extends '::base2.html.twig' %}
+{% block title %}Ver-Unidad{% endblock %}
+{% block body -%}
+    {% for flashMessage in app.session.flashbag.get('mensaje') %}
+        <div class="alert alert-success text-center">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    <h1><small>UNIDAD</small></h1>
+
+    <table class="record_properties table table-striped">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ entity.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Asignatura</th>
+                <td>{{ entity.asignatura }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    {% set listado = "unidad" %}
+    {% set editar = "unidad_edit" %}
+    <div id="control">
+    {{ include("::regre_edit_elim.html.twig") }}
+    </div>
+    
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/funciones.js') }}"></script>
+{% endblock javascripts %}

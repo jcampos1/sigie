@@ -1,0 +1,152 @@
+{% extends '::base2.html.twig' %}
+{% block title %}Nuevo-Ejercicio{% endblock %}
+{% block body %}
+	<h1><small>NUEVO EJERCICIO</small></h1>
+    <div class="text-right">
+		<button type="button" id="cancelarEvaluacion"  class=" pull-right btn btn-danger"><span class="glyphicon glyphicon-eye-close"></span><a  style='text-decoration:none;color:white;' href="{{ path('ejercicio') }}"> CANCELAR </a></button>
+		<br/><br/>	
+    </div>
+    {{ form_start(form, { "attr": { "id": "myForm" }}) }}
+	{{ form_errors(form) }}
+	    {{ form_row(form.descripcion) }}
+	    <br/>
+	    <div class="row">
+	    	<div class="col-lg-4">
+			    <div class="form-group">
+			        {{ form_label(form.componente) }}
+			        {{ form_errors(form.componente) }}
+			        {{ form_widget(form.componente, { 'attr': {'class': 'form-control'} }) }}
+			    </div>
+			</div>
+			<div class="col-lg-4">
+				<div class="form-group">
+			        {{ form_label(form.visibilidad) }}
+			        {{ form_errors(form.visibilidad) }}
+			        {{ form_widget(form.visibilidad, { 'attr': {'class': 'form-control'} }) }}
+			    </div>
+			</div>
+			<div class="col-lg-4">
+				<div class="form-group">
+					<div class="form-group">
+				        {{ form_label(form.complejidades) }}
+				        {{ form_errors(form.complejidades) }}
+				        {{ form_widget(form.complejidades, { 'attr': {'class': 'form-control'} }) }}
+				        <div id="message_comp">
+				    		<ul>
+				    			<li>
+				    				El campo 'complejidad(es)' no puede estar vacio
+				    			</li>
+				    		</ul>
+				    	</div>
+	    			</div>
+	    		</div>
+	    	</div>
+		</div>
+
+		<div class="row">
+	    	<div class="col-lg-6">
+	    		<div class="form-group">
+			        {{ form_label(form.unidad) }}
+			        {{ form_errors(form.unidad) }}
+			        {{ form_widget(form.unidad, { 'attr': {'class': 'form-control'} }) }}
+			    </div>
+			</div>
+			<div class="col-lg-6">
+				<div class="form-group" id="subtema">
+			        {{ form_label(form.subtema) }}
+			        {{ form_errors(form.subtema) }}
+			        {{ form_widget(form.subtema, { 'attr': {'class': 'form-control'} }) }}
+			    </div>
+			</div>
+		</div>
+
+	    <div style="display:none;">
+	    	{{ form_row(form.fechaUltimoUso) }}
+	    </div>
+
+	    {{ form_row(form.solucion) }}
+	    <br/>
+	    <div class="text-center">
+	    	<input type="submit" class="btn btn-primary btn-lg" value="CREAR EJERCICIO" id="crear_ejercicio" />
+
+	    	<button type="button" id="cancelarEvaluacion"  class="btn btn-danger btn-lg"><span class="glyphicon glyphicon-eye-close"></span><a  style='text-decoration:none;color:white;' href="{{ path('ejercicio') }}"> CANCELAR </a></button>
+
+		</div>
+		<div style="display:none">
+			{{ form_rest(form) }}
+		</div>
+	{{ form_end(form) }}
+
+	
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	<script>
+		$(document).ready(function(){
+			$("#subtema").hide();
+			$("#aviso_complejidad").hide();
+			$("#message_comp").hide();
+			
+			var $unidad = $('#{{ form.unidad.vars.id }}'); 
+		    var $form = $unidad.closest('form');
+		    recargar_subtema($unidad);
+
+		    // cada vez que el usuario cambie la unidad en el select
+		    $unidad.on('change', function() {
+		        recargar_subtema($unidad);
+		    });
+
+		    $("#appbundle_ejercicio_componente").select2();
+		    $("#appbundle_ejercicio_unidad").select2();
+		    $("#appbundle_ejercicio_visibilidad").select2();
+		    $("#appbundle_ejercicio_complejidades").select2({
+			   placeholder: "Seleccione complejidad",
+			   allowClear: true
+			});
+
+			/*$("#crear_ejercicio").on("click", function(e){
+				var vacio = true;
+	        	//estas son las complejidades que hay que verificar
+	        	$("#appbundle_ejercicio_complejidades option:selected").each(function() {	
+	        		vacio = false;		
+				});
+
+				if(vacio){
+					$("#message_comp").show();
+					e.preventDefault();
+				}else{
+					$("#message_comp").hide();
+				}
+			});*/
+			
+
+		    function recargar_subtema($unidad){
+		    	// creamos la data, solo con el campo unidad,
+		        // ya que es el dato relevante en este caso.
+		        var data = $unidad.serialize();
+
+		        // Hacemos un envío del formulario, lo que ejecutará el evento preSubmit
+		        // del listener AddStateFieldSubscriber,
+		        // y actualizará el campo subtema, con los subtemas de la unidad seleccionada.
+		        $.ajax({
+		            url : "{{ path('ejercicio_create')}}",
+		            type: "POST",
+		            data : data,
+		            success: function(html) {
+		            	$("#subtema").show();
+		                // la variable html representa toda la página junto con el select de subtema.
+		                // el cual tomamos y colocamos para reemplazar el select actual.
+		                $('#{{ form.subtema.vars.id }}').replaceWith($(html).find('#{{ form.subtema.vars.id }}'));
+		            }
+		        });
+		    }
+		});
+	</script>
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<style type="text/css">
+	</style>
+{% endblock %}

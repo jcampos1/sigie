@@ -1,0 +1,20 @@
+{% if componente == "teorico" %}
+	<h3>Teórico</h3>
+{% else %}
+	<h3>Práctico</h3>
+{% endif %}
+
+{% for unidad in unidades %}
+	<div>
+	  <label>
+	    <input type="checkbox" name="{{ componente }}" class="checkUnidades" value="{{ unidad.id }}">
+	    {{ unidad.nombre }}
+	  </label>
+	</div>
+	<div id="subtema_unidad{{ unidad.id }}_{{ componente }}"></div>
+{% endfor %}
+<script>
+$(document).ready(function(){
+	//alert({{ asignatura }});
+});
+</script>

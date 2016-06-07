@@ -1,0 +1,41 @@
+{% extends '::base2.html.twig' %}
+{% block title %}Editar-Complejidad{% endblock %}
+{% block body %}
+	{% for flashMessage in app.session.flashbag.get('mensaje') %}
+        <div class="alert alert-success text-center">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    <div class="col-sm-4"></div>
+    <div class="col-sm-4">
+    	<h1><small>EDITAR COMPLEJIDAD</small></h1>
+
+	    {{ form_start(edit_form) }}
+	    	<div class="form-group">
+		        {{ form_label(edit_form.nombre) }}
+		        {{ form_errors(edit_form.nombre) }}
+		        {{ form_widget(edit_form.nombre, { 'attr': {'class': 'form-control'} }) }}
+		    </div>
+	    	<div class="text-left">
+		    	<button type="submit" class="btn btn-primary btn-sm"> 
+	            	<span class="glyphicon glyphicon-wrench"></span> Actualizar
+	        	</button>
+			</div>
+			<div style="display:none">
+				{{ form_rest(edit_form) }}
+			</div>
+	    {{ form_end(edit_form) }}
+
+	        <ul class="record_actions list-inline">
+			    <li>
+			        <a href="{{ path('complejidad') }}">
+			            Regresar al listado de complejidades
+			        </a>
+			    </li>
+			</ul>
+			<br/><br/>
+	<br/><br/>
+	<br/><br/>
+	</div>
+	<div class="col-sm-4"></div>
+{% endblock %}

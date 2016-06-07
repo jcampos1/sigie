@@ -1,0 +1,27 @@
+<tr id="tr_control1_sele_{{ ejercicio.id }}">
+		<td></td>
+		<td>
+			<em>
+			<strong>Ejercicio 
+				{% if ejercicio.componente == "teorico" %}
+	    	  		Teórico
+	    	  	{% else %}
+	    	  		Práctico
+	    	  	{% endif %}
+	    	  	 / {{ ejercicio.unidad }}
+				/
+				<a id="sele_{{ ejercicio.id }}" class="btnQuitar" href="#">
+					<span style="font-size:25px;" class="glyphicon glyphicon-minus-sign"></span>
+				</a>
+			</strong>
+			</em>
+		</td>
+	</tr>
+<tr id="tr_control2_sele_{{ ejercicio.id }}">
+	<td>
+		<div name="idsEjercicios">
+			<a target="_blank" href="{{ path('ejercicio_show', { 'id': ejercicio.id }) }}">{{ ejercicio.id }}</a>
+		</div>
+	</td>
+	<td>{{ ejercicio.descripcion | raw }}</td>
+</tr>

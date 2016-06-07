@@ -1,0 +1,48 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+    <h1>Evaluacion list</h1>
+
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Asignatura</th>
+                <th>Tipo</th>
+                <th>Fechacreacion</th>
+                <th>Actions</th>
+            </tr>
+        </thead><meta charset="UTF-8">
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('evaluacion_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{{ entity.asignatura }}</td>
+                <td>{{ entity.tipo }}</td>
+                <td>{% if entity.fechaCreacion %}{{ entity.fechaCreacion|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('evaluacion_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('evaluacion_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div class="text-right">
+        <ul>
+            <li>
+                <a href="{{ path('evaluacion_new') }}">
+                    <button type="submit" class="btn btn-primary btn-lg"> 
+                        <span class="glyphicon glyphicon-plus-sign"></span> Crear evaluacion
+                    </button>
+                </a>
+            </li>
+        </ul>
+    </div>
+    {% endblock %}

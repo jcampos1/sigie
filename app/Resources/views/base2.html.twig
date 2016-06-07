@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>{% block title %}SIGIE{% endblock %}</title>
+        {% block stylesheets %}
+            <!--<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">-->
+             <link href="{{ asset('bootstrap/css/bootstrap.min.css') }}" type="text/css" rel="stylesheet" />
+            <link href="{{ asset('css/styles.css') }}" type="text/css" rel="stylesheet" />
+
+            <!--Css para el select2-->
+            <link href="{{ asset('css/select2-bootstrap-css-bootstrap3/select2-bootstrap.css') }}" type="text/css" rel="stylesheet" />
+            <link href="{{ asset('css/select2.css') }}" type="text/css" rel="stylesheet" />
+            <!--fin select2-->
+        {% endblock %} 
+        <link rel="icon" type="image/x-icon" href="{{ asset('images/favicon.ico') }}" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body>
+
+        {% block menu %}
+            <nav class="navbar navbar-inverse">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="#"><img src="{{ asset('images/logo.png') }}" width="150px;" height="30px;"></a>
+                    </div>
+                    <div class="collapse navbar-collapse" id="myNavbar">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="{{ path('seleccion')}}" style="color:white"><span class="glyphicon glyphicon-book"></span><strong>&nbsp;Instrumentos</strong></a></li>
+
+                            <li><a href="{{ path('ejercicio_new') }}" style="color:white"><span class="glyphicon glyphicon-tasks"></span><strong>&nbsp;Ejercicios</strong></a></li>
+
+                            <li><a href="{{ path('ejercicio')}}" style="color:white"><span class="glyphicon glyphicon-th-list"></span><strong>&nbsp;Repositorio</strong></a></li>
+
+                            <li><a href="{{ path('mensaje') }}" style="color:white"><span class="glyphicon glyphicon-envelope"></span><strong>&nbsp;Mensajes</strong></a></li>
+
+                            {% if is_granted('ROLE_SUPER_ADMIN') %}
+                            <li><a href="{{ path('admin') }}" style="color:white"><span class="glyphicon glyphicon-wrench"></span><strong>&nbsp;Administración</strong></a></li>
+                            {% endif %}
+
+                            <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#" style="color:white" >
+                            <span class="glyphicon glyphicon-user"></span><strong>&nbsp;Mi cuenta</strong>
+                            <span class="caret"></span></a>
+                                <ul class="dropdown-menu" >
+                                  <li><a href="{{ path('fos_user_profile_show') }}" >Perfil</a></li>
+                                  <li class="divider"></li>
+                                  <li><a href="{{ path('fos_user_security_logout') }}">Salir</a></li>
+                                </ul>
+                        </li>
+                        </ul>
+                        
+                        <!--<ul class="nav navbar-nav navbar-right">
+                            <li><a href="#" style="color:white"><span class="glyphicon glyphicon-user"></span><strong>&nbsp; Solicitar registro</strong></a></li>
+                        </ul>-->
+                    </div>
+                </div>
+            </nav>
+        {% endblock %}
+        <div class="container-fluid">
+            {% block body %}
+            {% endblock %}
+        </div>
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-3" style="background:aliceblue;">
+                    {% block left_sidebar %}
+                    {% endblock %}
+                </div>
+                <div class="col-sm-9">
+                    {% block right_sidebar %}
+                    {% endblock %}
+                </div>
+            </div> 
+            <div class="row">
+                <div class="col-sm-4" style="background:aliceblue;"> 
+                    {% block info_bar %}
+                    {% endblock %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12"> 
+                    {% block ejercicios_manual %}
+                    {% endblock %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    {% block controles %}
+                    {% endblock %}
+                </div>
+            </div>
+
+            {% block administracion %}
+            {% endblock %}
+
+            
+            {% block enlaces %}
+                <!--<br>
+                <div class="container-fluid text-center">
+                  <h2><i>Enlaces de Interés</i></h2>
+                  <br>
+                  <div class="row">
+                    <div class="col-sm-4">
+                      <a href="http://entornovirtual.facyt.uc.edu.ve/" target="_blank" ><img src="{{ asset('images/entornovirtual.png') }}" alt="Entorno Virtual" width="120px"></a>
+                    </div>
+                    <div class="col-sm-4">
+                         <a href="http://www.facyt.uc.edu.ve/" target="_blank" ><img src="{{ asset('images/cajas_estudiar.png') }}" alt="FACYT" width="120px"></a>
+                    </div>
+                    <div class="col-sm-4">
+                         <a href="http://sice.facyt.uc.edu.ve/" target="_blank" ><img src="{{ asset('images/sice.png') }}" alt="SICE" width="120px"></a>
+                    </div>
+                  </div>-->
+            {% endblock enlaces %}
+            
+            <br/><br/>
+            {% block footer %}
+
+                <footer class="text-center">
+                  <hr>
+                  <p><a href="http://www.fabricomidinero.xyz" title="Fabricomidinero" target="blank"><img src="http://fabricomidinero.xyz/images/logo_fabricomidinero.png"  width="100px"></a><strong> & </strong><a href="http://www.tecnosolvision.com.ve/" title="TecnoSolVisión" target="blank" rel="home" style="color:black;"><strong>TecnoSolVisión</strong></a><p>
+                </footer>
+            {% endblock %}
+        </div>
+
+        {% block javascripts %}
+            <!-- Librería jQuery requerida por los plugins de JavaScript, FALTA INCLUIR LA LIBRERIA PERO DESDE LOS ACTIVOS DE SIMFONY2 -->
+
+            <!--<script src="http://code.jquery.com/jquery.js"></script>-->
+            <script type="text/javascript" src="{{ asset('bootstrap/js/jquery.min.js') }}"></script>
+            <script src="{{ asset('bootstrap/js/bootstrap.min.js') }}"></script>
+            <script src="{{ asset('bundles/ckeditor/ckeditor.js') }}"></script>
+
+            <!--script para trabajar con select2-->
+            <script type="text/javascript" src="{{ asset('js/select2.js') }}"></script>
+            {% javascripts
+            '@TetranzSelect2EntityBundle/Resources/public/js/select2entity.js'
+            %}
+            <script src="{{ asset_url }}"></script>
+            {% endjavascripts %}
+
+        {% endblock %}
+    </body>
+</html>
